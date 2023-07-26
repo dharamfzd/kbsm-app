@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Student;
-use DataTables;
 
 class StudentController extends Controller
 {
@@ -13,7 +11,7 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $students = Student::all();
         return view('student.list', compact('students'));
@@ -26,10 +24,7 @@ class StudentController extends Controller
      */
     public function create(Request $request)
     {
-        $students = Student::select(['name', 'email', 'mobile', 'class', 'father_name']);
-        // return DataTables::of($students)->make(true);
-        $data = DataTables::of($students)->make(true);
-        dd($data);
+        //
     }
 
     /**
@@ -85,6 +80,11 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $recordIds = Student::find($id);
+        if (empty($recordIds)) {
+            return response()->json(['message' => 'No records selected to delete.'], 422);
+        }
+        $recordIds->delete();
+        return response()->json(['message' => 'Records deleted successfully.']);
     }
 }
