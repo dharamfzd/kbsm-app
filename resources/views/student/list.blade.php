@@ -67,21 +67,23 @@ $(document).on('click', '.btn', function (e) {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-    }).then((result) => {
-        $.ajax({
+    }).then((willDelete) => {
+      if (willDelete) {
+          $.ajax({
             url: url,
             method: "DELETE",
             data:{
-            "_token": "{{ csrf_token() }}",
-        },
-        success: function (response) {
-            swal('Deleted!', response.message, 'success');
-            $(removeRow).closest('tr').remove();
-        },
-        error: function (error) {
-            swal('Error!', error.responseJSON.message, 'error');
-        }
-        });
+              "_token": "{{ csrf_token() }}",
+            },
+            success: function (response) {
+              swal('Deleted!', response.message, 'success');
+              $(removeRow).closest('tr').remove();
+            },
+            error: function (error) {
+              swal('Error!', error.responseJSON.message, 'error');
+            }
+          });
+        }    
     });
 });
 </script>
